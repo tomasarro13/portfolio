@@ -7,7 +7,7 @@ import { defineConfig } from 'astro/config';
  * e.g. 'https://tomas-ariza-portfolio.your-subdomain.workers.dev'.
  * @type {string | null}
  */
-const SITE_URL = null;
+const SITE_URL = 'https://tomas-ariza-portfolio.tomas13ariza.workers.dev';
 
 export default defineConfig({
   ...(SITE_URL ? { site: SITE_URL } : {}),
