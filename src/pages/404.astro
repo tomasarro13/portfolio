@@ -1,0 +1,30 @@
+---
+import BaseLayout from '@presentation/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found" description="This page does not exist.">
+  <main id="main" class="not-found container">
+    <h1 class="not-found__title">This page does not exist.</h1>
+    <p class="muted">The link may be outdated or mistyped.</p>
+    <p>
+      <a class="button button--primary" href="/">
+        Go to the homepage
+      </a>
+    </p>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    gap: 1.25rem;
+    min-height: 100vh;
+  }
+
+  .not-found__title {
+    font-size: var(--text-xl);
+    font-stretch: 115%;
+  }
+</style>

@@ -1,0 +1,39 @@
+---
+import type { LinkDto } from '@application/dto/PortfolioDtos';
+import ExternalLink from './ExternalLink.astro';
+
+interface Props {
+  name: string;
+  sourceCode: LinkDto | null;
+}
+
+const { name, sourceCode } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner muted">
+    <p>
+      © {year} {name}
+    </p>
+    <p>
+      Built with Astro and hosted on Cloudflare.
+      {sourceCode && <ExternalLink href={sourceCode.href}>View the code</ExternalLink>}
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--rule);
+  }
+
+  .site-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    padding-block: 2rem;
+    font-size: var(--text-sm);
+  }
+</style>

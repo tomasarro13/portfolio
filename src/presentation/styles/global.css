@@ -1,0 +1,262 @@
+/*
+ * Design tokens. Light mode is drafting paper, dark mode is a blueprint:
+ * the same drawing, printed two ways.
+ */
+:root {
+  color-scheme: light dark;
+
+  --paper: #f2f4f3;
+  --ink: #15202b;
+  --graphite: #56626d;
+  --rule: #c5ced3;
+  --cobalt: #2440c9;
+  --cobalt-wash: rgb(36 64 201 / 0.08);
+  --grid-line: rgb(21 32 43 / 0.045);
+
+  --font-family: 'Archivo Variable', 'Arial Narrow', system-ui, sans-serif;
+
+  /* Classic typographic scale: 14, 18, 21, 24, 36, 48-72 */
+  --text-sm: 0.875rem;
+  --text-base: 1.125rem;
+  --text-md: 1.3125rem;
+  --text-lg: 1.5rem;
+  --text-xl: 2.25rem;
+  --text-display: clamp(3rem, 1.6rem + 5.6vw, 4.5rem);
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --speed-fast: 140ms;
+  --speed: 320ms;
+  --measure: 38rem;
+  --page-width: 72rem;
+  --gutter: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0d1b2a;
+    --ink: #e6ecf1;
+    --graphite: #9eafbf;
+    --rule: #2a4260;
+    --cobalt: #93a7ff;
+    --cobalt-wash: rgb(147 167 255 / 0.12);
+    --grid-line: rgb(230 236 241 / 0.05);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  color: var(--ink);
+  background-color: var(--paper);
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.15;
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+/* Texto justificado. `hyphens` es lo que evita los "ríos" de espacio blanco
+   entre palabras; sin eso, el justificado se ve roto. */
+.prose p,
+.prose li {
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* Debajo de este ancho las líneas son muy cortas y el justificado se ve mal. */
+@media (width < 30rem) {
+  .prose p,
+  .prose li {
+    text-align: left;
+    hyphens: none;
+  }
+}
+
+a {
+  color: var(--cobalt);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition:
+    text-underline-offset var(--speed-fast) var(--ease),
+    text-decoration-thickness var(--speed-fast) var(--ease),
+    color var(--speed-fast) var(--ease);
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--cobalt);
+  outline-offset: 3px;
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.container {
+  width: min(100% - 2 * var(--gutter), var(--page-width));
+  margin-inline: auto;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 10;
+  padding: 0.5rem 0.875rem;
+  color: var(--paper);
+  background: var(--ink);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+/* A short horizontal tick, like a leader line on a drawing. */
+.ticked-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.ticked-list > li {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.ticked-list > li::before {
+  content: '';
+  position: absolute;
+  top: 0.8em;
+  left: 0;
+  width: 0.75rem;
+  border-top: 1.5px solid var(--graphite);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.625rem 1.25rem;
+  font-size: var(--text-base);
+  font-stretch: 110%;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  border: 1.5px solid var(--ink);
+  border-radius: 2px;
+}
+
+.button {
+  transition:
+    color var(--speed-fast) var(--ease),
+    border-color var(--speed-fast) var(--ease),
+    background-color var(--speed-fast) var(--ease),
+    transform var(--speed-fast) var(--ease);
+}
+
+.button:hover {
+  color: var(--cobalt);
+  border-color: var(--cobalt);
+  transform: translateY(-2px);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+.button--primary {
+  color: var(--paper);
+  background: var(--ink);
+}
+
+.button--primary:hover {
+  color: var(--paper);
+  background: var(--cobalt);
+}
+
+.muted {
+  color: var(--graphite);
+}
+/*
+ * Aparición ligada al scroll, solo con CSS. `animation-timeline: view()` ata la
+ * animación a la posición del elemento en la pantalla, sin JavaScript ni
+ * IntersectionObserver, así la política de seguridad estricta sigue intacta.
+ * Los navegadores sin soporte simplemente muestran el contenido.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 26%;
+    }
+  }
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

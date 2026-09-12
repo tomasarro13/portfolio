@@ -1,0 +1,25 @@
+---
+import type { ProfileDto } from '@application/dto/PortfolioDtos';
+import Section from './Section.astro';
+
+interface Props {
+  profile: ProfileDto;
+}
+
+const { profile } = Astro.props;
+---
+
+<Section id="about" title="About">
+  <div class="about prose">
+    {profile.summary.map((paragraph) => (
+      <p>{paragraph}</p>
+    ))}
+  </div>
+</Section>
+
+<style>
+  .about {
+    display: grid;
+    gap: 1.25rem;
+  }
+</style>

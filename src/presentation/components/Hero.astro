@@ -1,0 +1,166 @@
+---
+import type { ProfileDto } from '@application/dto/PortfolioDtos';
+import ArchitectureDiagram from './ArchitectureDiagram.astro';
+import ExternalLink from './ExternalLink.astro';
+
+interface Props {
+  profile: ProfileDto;
+}
+
+const { profile } = Astro.props;
+const nameParts = profile.fullName.split(/\s+/);
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero__inner">
+    <div class="hero__text">
+      <h1 id="hero-title" class="hero__name">
+        {nameParts.map((part) => (
+          <span class="hero__name-part">{part}</span>
+        ))}
+      </h1>
+      <p class="hero__headline stagger">{profile.headline}</p>
+      <p class="hero__status stagger muted">
+        {profile.availability}, based in {profile.location}.
+      </p>
+      <div class="hero__actions stagger">
+        <a class="button button--primary" href={profile.emailHref}>
+          Email me
+        </a>
+        {profile.links.map((link) => (
+          <ExternalLink class="button" href={link.href}>
+            {link.label}
+          </ExternalLink>
+        ))}
+      </div>
+    </div>
+
+    <figure class="hero__figure">
+      <ArchitectureDiagram />
+      <figcaption class="hero__caption muted">
+        Dependencies point inward: the domain knows nothing about Astro, Cloudflare or where the
+        content is stored. <a href="#architecture">How this site is built</a>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .hero {
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 1.5rem 1.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .hero__inner {
+    display: grid;
+    gap: 3rem;
+    padding-block: clamp(3rem, 8vw, 6rem);
+  }
+
+  @media (min-width: 60rem) {
+    .hero__inner {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      align-items: center;
+    }
+  }
+  /*
+   * Una sola entrada orquestada al cargar: primero las líneas del nombre,
+   * después el texto de apoyo. Nada más en la página se anima al cargar.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__name-part,
+    .stagger {
+      animation: rise 600ms var(--ease) both;
+    }
+
+    .hero__name-part:nth-child(1) {
+      animation-delay: 60ms;
+    }
+
+    .hero__name-part:nth-child(2) {
+      animation-delay: 150ms;
+    }
+
+    .hero__name-part:nth-child(n + 3) {
+      animation-delay: 240ms;
+    }
+
+    .hero__headline {
+      animation-delay: 380ms;
+    }
+
+    .hero__status {
+      animation-delay: 460ms;
+    }
+
+    .hero__actions {
+      animation-delay: 540ms;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.75rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .hero__name {
+    display: grid;
+    font-size: var(--text-display);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+  }
+
+  /* Each line of the name steps down in width, like layers wrapping a core. */
+  .hero__name-part:nth-child(1) {
+    font-stretch: 125%;
+  }
+
+  .hero__name-part:nth-child(2) {
+    font-stretch: 100%;
+  }
+
+  .hero__name-part:nth-child(n + 3) {
+    font-stretch: 75%;
+    font-weight: 700;
+    color: var(--graphite);
+  }
+
+  .hero__headline {
+    max-width: 30rem;
+    margin-top: 2rem;
+    font-size: var(--text-md);
+    line-height: 1.4;
+  }
+
+  .hero__status {
+    margin-top: 0.75rem;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .hero__figure {
+    display: grid;
+    justify-items: center;
+    gap: 1.25rem;
+  }
+
+  .hero__caption {
+    max-width: 24rem;
+    font-size: var(--text-sm);
+    text-align: center;
+  }
+</style>

@@ -1,0 +1,16 @@
+---
+/*
+ * Every link that leaves the site goes through this component, so the
+ * security attributes cannot be forgotten on a single link.
+ */
+interface Props {
+  href: string;
+  class?: string;
+}
+
+const { href, class: className } = Astro.props;
+---
+
+<a href={href} class={className} rel="noopener noreferrer">
+  <slot />
+</a>

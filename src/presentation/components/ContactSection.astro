@@ -1,0 +1,54 @@
+---
+import type { ProfileDto } from '@application/dto/PortfolioDtos';
+import ExternalLink from './ExternalLink.astro';
+import Section from './Section.astro';
+
+interface Props {
+  profile: ProfileDto;
+}
+
+const { profile } = Astro.props;
+---
+
+<Section id="contact" title="Contact">
+  <div class="contact prose">
+    <p>
+      I am looking for a software engineering role where I can keep growing alongside an experienced
+      team. Email is the best way to reach me.
+    </p>
+    <a class="contact__email" href={profile.emailHref}>
+      {profile.email}
+    </a>
+    {profile.links.length > 0 && (
+      <ul class="contact__links">
+        {profile.links.map((link) => (
+          <li>
+            <ExternalLink href={link.href}>{link.label}</ExternalLink>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</Section>
+
+<style>
+  .contact {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+  }
+
+  .contact__email {
+    font-size: clamp(var(--text-md), 1rem + 2vw, var(--text-xl));
+    font-weight: 700;
+    font-stretch: 110%;
+    overflow-wrap: anywhere;
+  }
+
+  .contact__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    font-weight: 600;
+  }
+</style>

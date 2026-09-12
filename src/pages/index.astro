@@ -1,0 +1,52 @@
+---
+/*
+ * Route: the thin edge of the app. It asks the composition root for use cases,
+ * runs them, and hands plain data to presentation components.
+ */
+import AboutSection from '@presentation/components/AboutSection.astro';
+import ArchitectureSection from '@presentation/components/ArchitectureSection.astro';
+import ContactSection from '@presentation/components/ContactSection.astro';
+import CredentialList from '@presentation/components/CredentialList.astro';
+import ExperienceTimeline from '@presentation/components/ExperienceTimeline.astro';
+import Hero from '@presentation/components/Hero.astro';
+import ProjectList from '@presentation/components/ProjectList.astro';
+import Section from '@presentation/components/Section.astro';
+import SiteFooter from '@presentation/components/SiteFooter.astro';
+import SiteHeader from '@presentation/components/SiteHeader.astro';
+import SkillList from '@presentation/components/SkillList.astro';
+import BaseLayout from '@presentation/layouts/BaseLayout.astro';
+import { fromCertification, fromEducation } from '@presentation/view-models/CredentialItem';
+import { useCases } from '../composition-root';
+
+const [profile, experiences, projects, skillGroups, certifications, education] = await Promise.all([
+  useCases.getProfile.execute(),
+  useCases.listExperienceTimeline.execute(),
+  useCases.listProjects.execute(),
+  useCases.listSkillGroups.execute(),
+  useCases.listCertifications.execute(),
+  useCases.listEducation.execute(),
+]);
+
+const title = `${profile.fullName} | Software Engineer`;
+const description = `${profile.headline} ${profile.availability}, based in ${profile.location}.`;
+---
+
+<BaseLayout title={title} description={description}>
+  <SiteHeader name={profile.fullName} />
+  <main id="main">
+    <Hero profile={profile} />
+    <AboutSection profile={profile} />
+    <ExperienceTimeline experiences={experiences} />
+    <ProjectList projects={projects} />
+    <SkillList groups={skillGroups} />
+    <Section id="education" title="Education">
+      <CredentialList items={education.map(fromEducation)} />
+    </Section>
+    <Section id="certifications" title="Certifications">
+      <CredentialList items={certifications.map(fromCertification)} />
+    </Section>
+    <ArchitectureSection sourceCode={profile.sourceCode} />
+    <ContactSection profile={profile} />
+  </main>
+  <SiteFooter name={profile.fullName} sourceCode={profile.sourceCode} />
+</BaseLayout>

@@ -1,0 +1,157 @@
+---
+import type { ExperienceDto } from '@application/dto/PortfolioDtos';
+import { formatDuration, formatList, formatMonth, toIsoMonth } from '../formatters/text';
+import Section from './Section.astro';
+
+interface Props {
+  experiences: readonly ExperienceDto[];
+}
+
+const { experiences } = Astro.props;
+---
+
+<Section id="experience" title="Experience">
+  <ol class="timeline prose">
+    {experiences.map((job) => (
+      <li class:list={['timeline__item', 'reveal', { 'timeline__item--current': job.isCurrent }]}>
+        <p class="timeline__when muted">
+          <time datetime={toIsoMonth(job.start)}>{formatMonth(job.start)}</time>
+          {' – '}
+          {job.end ? <time datetime={toIsoMonth(job.end)}>{formatMonth(job.end)}</time> : 'Present'}
+          <span class="timeline__duration">{formatDuration(job.durationInMonths)}</span>
+        </p>
+        <div class="timeline__what">
+          <h3 class="timeline__role">{job.role}</h3>
+          <p class="timeline__company">
+            {job.company}, {job.location}
+          </p>
+          {job.highlights.length > 0 && (
+            <ul class="ticked-list timeline__highlights">
+              {job.highlights.map((highlight) => (
+                <li>{highlight}</li>
+              ))}
+            </ul>
+          )}
+          {job.technologies.length > 0 && (
+            <p class="timeline__tech muted">Working with {formatList(job.technologies)}.</p>
+          )}
+        </div>
+      </li>
+    ))}
+  </ol>
+</Section>
+
+<style>
+  .timeline {
+    position: relative;
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  /* La columna vertebral. Es un elemento aparte para poder dibujarse hacia
+     abajo mientras la sección entra en pantalla. */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 1.5px;
+    background: var(--rule);
+    transform-origin: top;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .timeline::before {
+        animation: draw-spine linear both;
+        animation-timeline: view();
+        animation-range: entry 6% cover 42%;
+      }
+    }
+  }
+
+  @keyframes draw-spine {
+    from {
+      scale: 1 0;
+    }
+    to {
+      scale: 1 1;
+    }
+  }
+
+  .timeline__item {
+    position: relative;
+    display: grid;
+    gap: 0.5rem;
+    padding-left: 1.75rem;
+  }
+
+  /* Hollow marker for past roles, filled marker for the current one. */
+  .timeline__item::before {
+    content: '';
+    position: absolute;
+    top: 0.35rem;
+    left: -0.4375rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    border: 1.5px solid var(--graphite);
+    border-radius: 50%;
+    background: var(--paper);
+  }
+
+  .timeline__item--current::before {
+    border-color: var(--cobalt);
+    background: var(--cobalt);
+  }
+  /* Un pulso lento en el cargo actual: el único punto de la página que se
+     mueve sin que nadie se lo pida. */
+  @media (prefers-reduced-motion: no-preference) {
+    .timeline__item--current::after {
+      content: '';
+      position: absolute;
+      top: 0.35rem;
+      left: -0.4375rem;
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 50%;
+      background: var(--cobalt);
+      animation: pulse 2.6s var(--ease) infinite;
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      opacity: 0.5;
+      scale: 1;
+    }
+    70%,
+    100% {
+      opacity: 0;
+      scale: 2.6;
+    }
+  }
+
+  .timeline__when {
+    font-size: var(--text-sm);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .timeline__duration {
+    margin-left: 0.75rem;
+    padding-left: 0.75rem;
+    border-left: 1px solid var(--rule);
+  }
+
+  .timeline__role {
+    font-size: var(--text-md);
+  }
+
+  .timeline__highlights {
+    margin-top: 0.75rem;
+  }
+
+  .timeline__tech {
+    margin-top: 0.75rem;
+    font-size: var(--text-sm);
+  }
+</style>

@@ -1,0 +1,53 @@
+---
+import type { SkillGroupDto } from '@application/dto/PortfolioDtos';
+import Section from './Section.astro';
+
+interface Props {
+  groups: readonly SkillGroupDto[];
+}
+
+const { groups } = Astro.props;
+---
+
+<Section id="skills" title="Skills">
+  <dl class="skills">
+    {groups.map((group) => (
+      <div class="skills__row">
+        <dt class="skills__group">{group.name}</dt>
+        <dd>{group.skills.join(', ')}</dd>
+      </div>
+    ))}
+  </dl>
+</Section>
+
+<style>
+  .skills {
+    display: grid;
+  }
+
+  .skills__row {
+    display: grid;
+    gap: 0.25rem 2rem;
+    padding-block: 0.875rem;
+    border-bottom: 1px solid var(--rule);
+    transition: border-color var(--speed) var(--ease);
+  }
+
+  .skills__row:hover {
+    border-bottom-color: var(--cobalt);
+  }
+
+  .skills__row:first-child {
+    padding-top: 0;
+  }
+
+  @media (min-width: 40rem) {
+    .skills__row {
+      grid-template-columns: 12rem minmax(0, 1fr);
+    }
+  }
+
+  .skills__group {
+    font-weight: 600;
+  }
+</style>

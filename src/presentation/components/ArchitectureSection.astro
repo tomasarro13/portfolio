@@ -1,0 +1,111 @@
+---
+import type { LinkDto } from '@application/dto/PortfolioDtos';
+import ExternalLink from './ExternalLink.astro';
+import Section from './Section.astro';
+
+interface Props {
+  sourceCode: LinkDto | null;
+}
+
+const { sourceCode } = Astro.props;
+
+const layers = [
+  {
+    name: 'Domain',
+    description:
+      'Entities such as Experience and Project, and the rules they enforce: valid dates, HTTPS-only links, no empty fields. Plain TypeScript with no framework code.',
+  },
+  {
+    name: 'Application',
+    description:
+      'One use case per action, such as ordering the experience timeline. Use cases depend only on interfaces declared by the domain.',
+  },
+  {
+    name: 'Infrastructure',
+    description:
+      'Adapters that implement those interfaces. Today the content comes from a file in the repository; moving to a CMS means adding a new adapter.',
+  },
+  {
+    name: 'Presentation',
+    description:
+      'Astro components that render what the use cases return. They never touch entities or adapters directly.',
+  },
+];
+---
+
+<Section id="architecture" title="How this site is built">
+  <div class="architecture prose">
+    <p>
+      This portfolio is small, but it is organised the way I would organise a production codebase,
+      so the code itself is part of the work on show.
+    </p>
+
+    <dl class="layers">
+      {layers.map((layer) => (
+        <div class="layers__row">
+          <dt class="layers__name">{layer.name}</dt>
+          <dd class="muted">{layer.description}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <ul class="ticked-list">
+      <li>
+        SOLID in practice: single-purpose use cases, small repository interfaces, and a composition
+        root that injects concrete classes.
+      </li>
+      <li>
+        Every pull request runs lint rules that block imports across layers, type checks, unit tests
+        with coverage thresholds, a production build and a dependency audit.
+      </li>
+      <li>
+        A strict Content Security Policy, HTTPS-only content, and no cookies, trackers or
+        third-party requests.
+      </li>
+    </ul>
+
+    {sourceCode && (
+      <p class="architecture__source">
+        <ExternalLink href={sourceCode.href}>
+          Read the source code on {sourceCode.host}
+        </ExternalLink>
+      </p>
+    )}
+  </div>
+</Section>
+
+<style>
+  .architecture {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .layers {
+    display: grid;
+    border-left: 3px solid var(--cobalt);
+  }
+
+  .layers__row {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.875rem 0 0.875rem 1.25rem;
+    transition: background-color var(--speed) var(--ease);
+  }
+
+  .layers__row:hover {
+    background-color: var(--cobalt-wash);
+  }
+
+  .layers__row + .layers__row {
+    border-top: 1px solid var(--rule);
+  }
+
+  .layers__name {
+    font-weight: 700;
+    font-stretch: 110%;
+  }
+
+  .architecture__source {
+    font-weight: 600;
+  }
+</style>

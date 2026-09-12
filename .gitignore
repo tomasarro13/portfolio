@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+coverage/
+.wrangler/
+
+# Environment and secrets: never commit these
+.env
+.env.*
+.dev.vars
+*.pem
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+*.log

@@ -1,0 +1,94 @@
+---
+import type { ProjectDto } from '@application/dto/PortfolioDtos';
+import { formatList } from '../formatters/text';
+import ExternalLink from './ExternalLink.astro';
+import Section from './Section.astro';
+
+interface Props {
+  projects: readonly ProjectDto[];
+}
+
+const { projects } = Astro.props;
+---
+
+<Section id="projects" title="Projects">
+  <div class="projects prose">
+    {projects.map((project) => (
+      <article class="project reveal">
+        <h3 class="project__name">{project.name}</h3>
+        <p>{project.summary}</p>
+        {project.highlights.length > 0 && (
+          <ul class="ticked-list project__highlights">
+            {project.highlights.map((highlight) => (
+              <li>{highlight}</li>
+            ))}
+          </ul>
+        )}
+        <p class="project__tech muted">Built with {formatList(project.technologies)}.</p>
+        {(project.repository || project.live) && (
+          <p class="project__links">
+            {project.repository && (
+              <ExternalLink href={project.repository.href}>{project.repository.label}</ExternalLink>
+            )}
+            {project.live && (
+              <ExternalLink href={project.live.href}>{project.live.label}</ExternalLink>
+            )}
+          </p>
+        )}
+      </article>
+    ))}
+  </div>
+</Section>
+
+<style>
+  .projects {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .project {
+    display: grid;
+    gap: 0.75rem;
+    transition: border-color var(--speed) var(--ease);
+  }
+  .project__name {
+    position: relative;
+    width: fit-content;
+  }
+
+  .project__name::after {
+    content: '';
+    position: absolute;
+    bottom: -0.25rem;
+    left: 0;
+    width: 100%;
+    border-bottom: 2px solid var(--cobalt);
+    scale: 0 1;
+    transform-origin: left;
+    transition: scale var(--speed) var(--ease);
+  }
+
+  .project:hover .project__name::after {
+    scale: 1 1;
+  }
+
+  .project + .project {
+    padding-top: 2.5rem;
+    border-top: 1px dashed var(--rule);
+  }
+
+  .project__name {
+    font-size: var(--text-md);
+  }
+
+  .project__tech {
+    font-size: var(--text-sm);
+  }
+
+  .project__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    font-weight: 600;
+  }
+</style>
