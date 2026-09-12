@@ -106,8 +106,8 @@ export const portfolioData: PortfolioSource = {
 
   skillGroups: [
     { name: 'Programming', skills: ['Python', 'Java', 'Dart'] },
-        {
-      name: 'Mobile', 
+    {
+      name: 'Mobile',
       skills: ['Flutter', 'REST APIs', 'Background geolocation', 'Push notifications'],
     },
     { name: 'Tools and platforms', skills: ['Git', 'GitHub', 'Linux', 'DevOps practices'] },
