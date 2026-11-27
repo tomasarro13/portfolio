@@ -35,10 +35,10 @@ export const portfolioData: PortfolioSource = {
       start: '2026-05',
       end: null,
       highlights: [
-        'Responsible for BO-TECH TRACKING since version 3.2.3, a real-time school tracking and access control app serving schools, transport operators and families across Colombia.',
+        'Responsible for BO-TECH TRACKING since version 3.2.3, a real-time school tracking and access control app connected to a microservices backend, serving schools, transport operators and families across Colombia.',
         'Built BOTi, an AI chatbot that answers families’ questions inside the app.',
         'Built digital ID cards in Apple Wallet, geofencing, multi-profile accounts, and the permissions and incident-reporting modules.',
-        'Ship to iOS and Android from a single codebase, integrating REST APIs, background geolocation, push notifications and QR codes. The team works in Scrum sprints tracked in Jira.',
+        'Ship to iOS and Android from a single codebase, integrating REST APIs, background geolocation, push notifications and QR codes. The team works in Scrum sprints tracked in Jira, and I handle minors’ personal data under Colombia’s habeas data rules.',
       ],
       technologies: [
         'Flutter',
@@ -51,15 +51,15 @@ export const portfolioData: PortfolioSource = {
       ],
     },
     {
-      role: 'Technical Support & Customer Service Representative',
+      role: 'Bilingual Technical Support Advisor (Apple)',
       company: 'Teleperformance',
       location: 'Colombia',
       start: '2023-07',
       end: '2026-05',
       highlights: [
-        'Diagnosed and resolved hardware and software issues for customers.',
-        'Handled high-volume interactions while meeting quality, response-time and customer satisfaction targets.',
-        'Guided users through troubleshooting processes, improving resolution efficiency and customer satisfaction.',
+        'Bilingual technical support (English B2) for Apple customers on iOS, iPadOS and watchOS, 48 hours a week.',
+        'Diagnosed and resolved hardware and software issues following structured troubleshooting processes.',
+        'Handled high-volume interactions while meeting quality, response-time and customer satisfaction targets, receiving 20 to 40 satisfaction surveys a month on average.',
       ],
       technologies: [],
     },
@@ -260,7 +260,8 @@ export const portfolioData: PortfolioSource = {
       institution: 'Universidad de La Sabana',
       location: 'Chía, Colombia',
       status: 'in-progress',
-      graduation: null,
+      // Expected completion.
+      graduation: '2027-02',
     },
     {
       degree: 'High school diploma',
