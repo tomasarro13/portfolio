@@ -42,6 +42,7 @@ const navigation = [
       { title: 'Work', links: navigation.slice(2, 4) },
     ],
     primaryButton: { label: 'Contact', href: '#contact' },
+    class: 'site-floating-menu',
   })}
 ></div>
 
@@ -49,6 +50,28 @@ const navigation = [
   /* The floating menu replaces the static navigation once it has mounted. */
   :global(.has-floating-menu) .site-header__nav {
     visibility: hidden;
+  }
+
+  /* On small screens the floating bar spans the width: the name moves below it. */
+  @media (width < 48rem) {
+    :global(.has-floating-menu) .site-header__inner {
+      padding-top: 4.5rem;
+    }
+  }
+
+  /*
+   * The component centres itself and grows to half the viewport, which covers the name on wide
+   * screens. From 48rem it aligns to the right edge of the page instead, next to the name.
+   * The class is passed to the component as a prop; these unlayered rules beat its utilities.
+   */
+  @media (width >= 48rem) {
+    :global(.site-floating-menu) {
+      right: max(var(--gutter), calc((100vw - var(--page-width)) / 2));
+      left: auto;
+      width: min(34rem, calc(100vw - 2 * var(--gutter) - 18rem));
+      max-width: none;
+      translate: none;
+    }
   }
 
   .site-header {
