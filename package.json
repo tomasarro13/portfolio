@@ -20,6 +20,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "verify:dist": "node scripts/verify-dist.mjs",
+    "build:motion-css": "tailwindcss -i tooling/hypermotion.tailwind.css -o src/presentation/styles/hypermotion.css",
     "verify": "npm run lint && npm run format:check && npm run check && npm run test:coverage && npm run build && npm run verify:dist",
     "deploy": "astro build && wrangler deploy"
   },
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@eslint/js": "^10.0.1",
+    "@tailwindcss/cli": "^4.3.5",
     "@types/node": "^24.13.4",
     "@vitest/coverage-v8": "^5.0.0",
     "eslint": "^10.10.0",
@@ -37,6 +39,7 @@
     "globals": "^17.12.0",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^1.0.0",
+    "tailwindcss": "^4.3.5",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.70.0",
     "vitest": "^5.0.0",

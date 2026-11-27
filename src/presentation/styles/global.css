@@ -42,101 +42,108 @@
   }
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html {
-  text-size-adjust: 100%;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
+/*
+ * Element defaults live in the "base" cascade layer so the utility classes of the
+ * HyperMotion components (layer "utilities") can override them inside those components.
+ * Component styles stay unlayered and keep winning over both.
+ */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
   }
-}
 
-body {
-  margin: 0;
-  font-family: var(--font-family);
-  font-size: var(--text-base);
-  line-height: 1.55;
-  color: var(--ink);
-  background-color: var(--paper);
-}
+  html {
+    text-size-adjust: 100%;
+  }
 
-h1,
-h2,
-h3,
-p,
-ul,
-ol,
-dl,
-dd,
-figure {
-  margin: 0;
-}
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
 
-ul,
-ol {
-  padding: 0;
-  list-style: none;
-}
+  body {
+    margin: 0;
+    font-family: var(--font-family);
+    font-size: var(--text-base);
+    line-height: 1.55;
+    color: var(--ink);
+    background-color: var(--paper);
+  }
 
-h1,
-h2,
-h3 {
-  line-height: 1.15;
-  font-weight: 700;
-  text-wrap: balance;
-}
+  h1,
+  h2,
+  h3,
+  p,
+  ul,
+  ol,
+  dl,
+  dd,
+  figure {
+    margin: 0;
+  }
 
-p {
-  text-wrap: pretty;
-}
-/* Texto justificado. `hyphens` es lo que evita los "ríos" de espacio blanco
-   entre palabras; sin eso, el justificado se ve roto. */
-.prose p,
-.prose li {
-  text-align: justify;
-  hyphens: auto;
-}
+  ul,
+  ol {
+    padding: 0;
+    list-style: none;
+  }
 
-/* Debajo de este ancho las líneas son muy cortas y el justificado se ve mal. */
-@media (width < 30rem) {
+  h1,
+  h2,
+  h3 {
+    line-height: 1.15;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+  /* Texto justificado. `hyphens` es lo que evita los "ríos" de espacio blanco
+     entre palabras; sin eso, el justificado se ve roto. */
   .prose p,
   .prose li {
-    text-align: left;
-    hyphens: none;
+    text-align: justify;
+    hyphens: auto;
   }
-}
 
-a {
-  color: var(--cobalt);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
-  transition:
-    text-underline-offset var(--speed-fast) var(--ease),
-    text-decoration-thickness var(--speed-fast) var(--ease),
-    color var(--speed-fast) var(--ease);
-}
+  /* Debajo de este ancho las líneas son muy cortas y el justificado se ve mal. */
+  @media (width < 30rem) {
+    .prose p,
+    .prose li {
+      text-align: left;
+      hyphens: none;
+    }
+  }
 
-a:hover {
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.3em;
-}
+  a {
+    color: var(--cobalt);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition:
+      text-underline-offset var(--speed-fast) var(--ease),
+      text-decoration-thickness var(--speed-fast) var(--ease),
+      color var(--speed-fast) var(--ease);
+  }
 
-:focus-visible {
-  outline: 3px solid var(--cobalt);
-  outline-offset: 3px;
-}
+  a:hover {
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.3em;
+  }
 
-svg {
-  display: block;
-  max-width: 100%;
-  height: auto;
+  :focus-visible {
+    outline: 3px solid var(--cobalt);
+    outline-offset: 3px;
+  }
+
+  svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 .container {
@@ -258,5 +265,52 @@ svg {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------ Motion layer (HyperMotion) */
+
+/* Fluid simulation fixed behind the content. Content sits above it and stays readable. */
+.fluid-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.fluid-backdrop__canvas {
+  position: absolute;
+  inset: 0;
+}
+
+body {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Thin bar that fills as the page scrolls. Pure CSS: a scroll-driven animation. */
+.scroll-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 60;
+  height: 3px;
+  background: var(--cobalt);
+  transform-origin: left;
+  scale: 0 1;
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-progress {
+      animation: scroll-progress linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+
+@keyframes scroll-progress {
+  to {
+    scale: 1 1;
   }
 }

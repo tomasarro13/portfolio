@@ -1,0 +1,47 @@
+/*
+ * Source for src/presentation/styles/hypermotion.css (generated: `npm run build:motion-css`).
+ * HyperMotion components style themselves with Tailwind utility classes. This file compiles
+ * only the classes used inside the vendored bundles, mapped to the portfolio's design tokens,
+ * into a static stylesheet, so the Content-Security-Policy never has to allow inline styles.
+ * No Tailwind preflight: the rest of the site keeps its own base styles.
+ */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities) source(none);
+@source '../public/vendor/hypermotion';
+
+@theme inline {
+  --color-background: var(--paper);
+  --color-background-muted: var(--paper);
+  --color-background-inset: var(--cobalt-wash);
+  --color-foreground: var(--ink);
+  --color-foreground-muted: var(--graphite);
+  --color-border: var(--rule);
+  --color-accent: var(--cobalt);
+  --font-sans: var(--font-family);
+  --ease-motion-core: cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+/*
+ * The minimum of Tailwind's preflight that the components rely on, scoped to them.
+ * Components render inside their [data-hypermotion] element, except the floating menu,
+ * which appends its own fixed container to <body>.
+ */
+@layer base {
+  :where([data-hypermotion], body > div.fixed) :where(*, ::before, ::after) {
+    box-sizing: border-box;
+    border: 0 solid;
+  }
+
+  :where([data-hypermotion], body > div.fixed) :where(button, a) {
+    font: inherit;
+    color: inherit;
+    text-decoration: inherit;
+    background-color: transparent;
+  }
+
+  :where([data-hypermotion], body > div.fixed) button {
+    padding: 0;
+    cursor: pointer;
+  }
+}

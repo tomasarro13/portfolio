@@ -18,7 +18,7 @@ const boundary = (/** @type {string[]} */ forbidden, /** @type {string} */ messa
 });
 
 export default defineConfig(
-  { ignores: ['dist/', '.astro/', 'coverage/', 'node_modules/', '.wrangler/'] },
+  { ignores: ['dist/', '.astro/', 'coverage/', 'node_modules/', '.wrangler/', 'public/vendor/'] },
 
   js.configs.recommended,
   tseslint.configs.strict,

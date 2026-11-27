@@ -17,4 +17,10 @@ export default defineConfig({
     // Content-Security-Policy in public/_headers never has to allow inline styles.
     inlineStylesheets: 'never',
   },
+  vite: {
+    build: {
+      // Never inline scripts either: Astro inlines small ones, and script-src 'self' blocks them.
+      assetsInlineLimit: 0,
+    },
+  },
 });
