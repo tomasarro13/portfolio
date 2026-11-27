@@ -29,6 +29,29 @@ const { profile } = Astro.props;
         ))}
       </ul>
     )}
+    <figure class="contact__globe">
+      <div
+        class="contact__globe-canvas"
+        data-hypermotion="globe"
+        data-props={JSON.stringify({
+          markers: [{ location: [4.711, -74.072], size: 0.08, id: 'bogota' }],
+          autoRotate: true,
+          pointCount: 9000,
+          landPointColor: '#93a7ff',
+          fresnelConfig: { color: '#15202b', rimColor: '#4f6bed', rimPower: 6, rimIntensity: 1.2 },
+          atmosphereConfig: {
+            color: '#4f6bed',
+            scale: 1.1,
+            power: 12,
+            coefficient: 0.9,
+            intensity: 0.8,
+          },
+          scale: 1.05,
+          focusOn: [4.6, -74.1],
+        })}
+      ></div>
+      <figcaption class="muted">Based in Bogotá, Colombia · open to remote work</figcaption>
+    </figure>
   </div>
 </Section>
 
@@ -44,6 +67,23 @@ const { profile } = Astro.props;
     font-weight: 700;
     font-stretch: 110%;
     overflow-wrap: anywhere;
+  }
+
+  .contact__globe {
+    display: grid;
+    gap: 0.75rem;
+    width: min(100%, 22rem);
+    font-size: var(--text-sm);
+  }
+
+  .contact__globe-canvas {
+    position: relative;
+    aspect-ratio: 1;
+  }
+
+  /* Without the globe (reduced motion, or it failed to load), the caption is enough. */
+  .contact__globe-canvas:is([data-hypermotion-state='failed'], [data-hypermotion-state='skipped']) {
+    display: none;
   }
 
   .contact__links {

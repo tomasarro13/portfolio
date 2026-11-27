@@ -3,3 +3,6 @@ dist/
 coverage/
 .wrangler/
 package-lock.json
+# Vendored third-party bundles and generated CSS: never reformat.
+public/vendor/
+src/presentation/styles/hypermotion.css

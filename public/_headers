@@ -1,7 +1,9 @@
 # Security headers for every response served by Cloudflare.
+# style-src allows six exact, static style attributes used inside the vendored HyperMotion
+# bundles ('unsafe-hashes' + their SHA-256). verify-dist checks the list stays in sync.
 # Test them after deploying at https://securityheaders.com
 /*
-  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-hashes' 'sha256-2HMpgSlSMMdqRF62f6xGq0nizp6ArzE/vf2Xdq9uD10=' 'sha256-IykQPg/Vopt7b91z1OjiVpCg0MBcokPopELoF3Bed1I=' 'sha256-aVs9w3pUs5UGk5dsxMgpm9vfefKuo3Jg8GWcs1NtZ4A=' 'sha256-G1BR0wU4PZyN/xje5UjmpZbkO0q6sDomFK2DT81svxA=' 'sha256-ecHCfgmxw/gUxM9Ai7h+Be1QXdr4H+pc0kXBnOrVDRo=' 'sha256-3yk4KELNyC5RWKIiT1Iqg9S/fXKKwO8PqNNBRAohVYY='; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY

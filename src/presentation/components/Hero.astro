@@ -9,6 +9,13 @@ interface Props {
 
 const { profile } = Astro.props;
 const nameParts = profile.fullName.split(/\s+/);
+const loopWords = [
+  'AI chatbots',
+  'n8n automations',
+  'Prefect workflows',
+  'Flutter apps',
+  'microservices',
+];
 ---
 
 <section class="hero" aria-labelledby="hero-title">
@@ -19,6 +26,18 @@ const nameParts = profile.fullName.split(/\s+/);
           <span class="hero__name-part">{part}</span>
         ))}
       </h1>
+      <p class="hero__loop stagger" aria-label="Building with AI, automation and software">
+        <span aria-hidden="true">Building with</span>
+        <span
+          class="hero__loop-word"
+          aria-hidden="true"
+          data-hypermotion="text-loop"
+          data-eager
+          data-props={JSON.stringify({ texts: loopWords, interval: 2200 })}
+        >
+          {loopWords[0]}
+        </span>
+      </p>
       <p class="hero__headline stagger">{profile.headline}</p>
       <p class="hero__status stagger muted">
         {profile.availability}, based in {profile.location}.
@@ -88,6 +107,10 @@ const nameParts = profile.fullName.split(/\s+/);
       animation-delay: 240ms;
     }
 
+    .hero__loop {
+      animation-delay: 330ms;
+    }
+
     .hero__headline {
       animation-delay: 380ms;
     }
@@ -134,9 +157,27 @@ const nameParts = profile.fullName.split(/\s+/);
     color: var(--graphite);
   }
 
+  .hero__loop {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.5ch;
+    margin-top: 2rem;
+    font-size: var(--text-xl);
+    font-weight: 700;
+    font-stretch: 110%;
+    line-height: 1.2;
+  }
+
+  .hero__loop-word {
+    display: inline-block;
+    min-width: 12ch;
+    color: var(--cobalt);
+  }
+
   .hero__headline {
     max-width: 30rem;
-    margin-top: 2rem;
+    margin-top: 1rem;
     font-size: var(--text-md);
     line-height: 1.4;
   }

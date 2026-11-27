@@ -51,6 +51,24 @@ try {
   problems.push('dist/_headers not found: security headers would not be applied');
 }
 
+// Every static style attribute inside the vendored HyperMotion bundles must be allowed
+// by hash in the CSP, or the browser blocks it.
+try {
+  const { createHash } = await import('node:crypto');
+  const headers = await readFile(join(DIST, '_headers'), 'utf8');
+  const vendor = join(DIST, 'vendor', 'hypermotion');
+  for (const name of await readdir(vendor)) {
+    if (!name.endsWith('.js')) continue;
+    const code = await readFile(join(vendor, name), 'utf8');
+    for (const [, value] of code.matchAll(/style="([^"]*)"/g)) {
+      const hash = `'sha256-${createHash('sha256').update(value).digest('base64')}'`;
+      if (!headers.includes(hash)) problems.push(`_headers: CSP is missing ${hash} for ${name}`);
+    }
+  }
+} catch {
+  // No vendored bundles: nothing to check.
+}
+
 if (problems.length > 0) {
   process.stderr.write(`Security check failed:\n- ${problems.join('\n- ')}\n`);
   process.exit(1);

@@ -31,7 +31,26 @@ const navigation = [
   </div>
 </header>
 
+<!-- HyperMotion floating menu. When it mounts, the static navigation above is hidden. -->
+<div
+  class="floating-menu"
+  data-hypermotion="floating-menu"
+  data-eager
+  data-props={JSON.stringify({
+    menuGroups: [
+      { title: 'Profile', links: navigation.slice(0, 2) },
+      { title: 'Work', links: navigation.slice(2, 4) },
+    ],
+    primaryButton: { label: 'Contact', href: '#contact' },
+  })}
+></div>
+
 <style>
+  /* The floating menu replaces the static navigation once it has mounted. */
+  :global(.has-floating-menu) .site-header__nav {
+    visibility: hidden;
+  }
+
   .site-header {
     border-bottom: 1px solid var(--rule);
   }
