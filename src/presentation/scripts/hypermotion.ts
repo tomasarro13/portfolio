@@ -40,6 +40,37 @@ function readProps(element: HTMLElement): Record<string, unknown> {
   }
 }
 
+/**
+ * The fluid simulation sits behind the content with `pointer-events: none`, so its canvas never
+ * receives the pointer. It also plays a demo animation on its own until the first pointermove.
+ * This stops the demo right away and forwards the real pointer from the window, so the fluid
+ * only moves when the visitor moves the mouse.
+ */
+function followPointer(element: HTMLElement): void {
+  const forward = (x: number, y: number): void => {
+    element
+      .querySelector('canvas')
+      ?.dispatchEvent(new PointerEvent('pointermove', { clientX: x, clientY: y }));
+  };
+
+  // A still pointer off screen ends the demo without drawing anything. The canvas attaches its
+  // listener a few frames after mounting, so this repeats briefly.
+  let frames = 0;
+  const stopDemo = (): void => {
+    forward(-1000, -1000);
+    if (++frames < 60) requestAnimationFrame(stopDemo);
+  };
+  requestAnimationFrame(stopDemo);
+
+  window.addEventListener(
+    'pointermove',
+    (event) => {
+      if (event.pointerType === 'mouse') forward(event.clientX, event.clientY);
+    },
+    { passive: true },
+  );
+}
+
 async function mount(element: HTMLElement): Promise<void> {
   const component = element.dataset.hypermotion;
   if (!component || element.dataset.hypermotionState) return;
@@ -50,6 +81,7 @@ async function mount(element: HTMLElement): Promise<void> {
     element.replaceChildren();
     try {
       render(element, readProps(element));
+      if (component === 'fluid-simulation') followPointer(element);
       element.dataset.hypermotionState = 'mounted';
       document.documentElement.classList.add(`has-${component}`);
     } catch (error) {
